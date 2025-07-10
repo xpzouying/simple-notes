@@ -31,7 +31,7 @@ fn main() {
             menu.append(&quit_item)?;
 
             // Create system tray
-            let tray = TrayIconBuilder::new()
+            let _tray = TrayIconBuilder::new()
                 .menu(&menu)
                 .icon(app.default_window_icon().unwrap().clone())
                 .on_menu_event(|app, event| match event.id.as_ref() {
