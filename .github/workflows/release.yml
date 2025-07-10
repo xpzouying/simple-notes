@@ -33,23 +33,47 @@ jobs:
       - name: Build
         run: npm run tauri build
 
+      - name: Get version info
+        id: version
+        run: |
+          # Create semantic version based on date and run number
+          VERSION="1.0.$(date +'%Y%m%d').${{ github.run_number }}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG_NAME=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Package app as zip
+        run: |
+          cd src-tauri/target/release/bundle/macos
+          zip -r "Simple-Notes-${{ steps.version.outputs.VERSION }}.zip" "Simple Notes.app"
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
+          tag_name: ${{ steps.version.outputs.TAG_NAME }}
+          name: Simple Notes ${{ steps.version.outputs.TAG_NAME }}
           body: |
-            ## Changes in this Release
+            ## Simple Notes Release ${{ steps.version.outputs.TAG_NAME }}
+            
+            ### Changes in this Release
             - Auto-generated release from commit ${{ github.sha }}
             
-            ## Installation
-            - Download the `.app` file for macOS
-            - Drag to Applications folder
+            ### Installation Instructions
+            1. Download the `Simple-Notes-${{ steps.version.outputs.VERSION }}.zip` file
+            2. Extract the zip file
+            3. Drag `Simple Notes.app` to your Applications folder
+            4. Launch Simple Notes from Applications or Spotlight
             
-            ## Requirements
-            - macOS 10.15 or later
+            ### System Requirements
+            - macOS 10.15 (Catalina) or later
+            - 64-bit Intel or Apple Silicon Mac
+            
+            ### Features
+            - 🍎 Native macOS menubar app
+            - 📝 Markdown note editing
+            - ☁️ GitHub Gist synchronization
+            - 🎨 Clean, modern interface
           files: |
-            src-tauri/target/release/bundle/macos/*.app
+            src-tauri/target/release/bundle/macos/Simple-Notes-${{ steps.version.outputs.VERSION }}.zip
           draft: false
           prerelease: false
         env:
