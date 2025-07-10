@@ -3,6 +3,11 @@
 ## 产品概述
 MacOS菜单栏笔记应用，提供快速记录和同步到Github Gist的功能。
 
+## 版本信息
+- 当前版本：v1.0.20250110.x（语义化版本号）
+- 版本号规则：v{主版本}.{次版本}.{日期YYYYMMDD}.{构建号}
+- 发布方式：GitHub Actions 自动发布
+
 ## 核心功能
 
 ### ✅ 已定义需求
@@ -34,9 +39,12 @@ MacOS菜单栏笔记应用，提供快速记录和同步到Github Gist的功能�
 - [x] 采用shadcn风格
 
 #### 7. 自动化发布
-- [ ] GitHub Actions 自动发布
-- [ ] 合入master后自动创建Release包
-- [ ] 配置Release write权限
+- [x] GitHub Actions 自动发布
+- [x] 合入main分支后自动创建Release包
+- [x] 配置Release write权限
+- [x] .app文件自动压缩为zip包
+- [x] 语义化版本号管理
+- [x] 用户友好的下载和安装说明
 
 ### 📝 开发进度
 
@@ -50,4 +58,5 @@ MacOS菜单栏笔记应用，提供快速记录和同步到Github Gist的功能�
 | 2025-01-09 | 集成GitHub Gist API | 完成 |
 | 2025-01-09 | 实现右键菜单功能 | 完成 |
 | 2025-01-09 | 添加配置管理功能 | 完成 |
-| 2025-01-10 | 增加GitHub Actions自动发布功能 | 进行中 |
+| 2025-01-10 | 增加GitHub Actions自动发布功能 | 完成 |
+| 2025-01-10 | 改进Release打包，添加zip压缩和语义化版本号 | 完成 |
