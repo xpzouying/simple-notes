@@ -33,7 +33,6 @@ fn main() {
             // Create system tray
             let _tray = TrayIconBuilder::new()
                 .menu(&menu)
-                .icon(app.default_window_icon().unwrap().clone())
                 .on_menu_event(|app, event| match event.id.as_ref() {
                     "open" => {
                         let window = app.get_webview_window("main").unwrap();
