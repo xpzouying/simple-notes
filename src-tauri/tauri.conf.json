@@ -1,6 +1,6 @@
 {
   "productName": "Simple Notes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "ai.haha.simple-notes",
   "build": {
     "beforeDevCommand": "npm run dev",
