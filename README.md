@@ -19,6 +19,24 @@ A lightweight macOS menubar notes app built with Tauri and React, featuring Mark
 - Node.js 16+
 - GitHub Personal Access Token (for Gist sync)
 
+### Download from Releases
+
+Download the latest release from the [Releases page](https://github.com/xpzouying/simple-notes/releases).
+
+**Note for macOS users**: If you encounter the error "Simple Notes is damaged and can't be opened", this is due to macOS Gatekeeper security. To fix this:
+
+1. Open Terminal
+2. Navigate to the folder containing the app
+3. Run the following command:
+   ```bash
+   xattr -cr "Simple Notes.app"
+   ```
+4. Try opening the app again
+
+Alternatively, you can allow the app in System Preferences:
+- Go to System Preferences > Security & Privacy > General
+- Click "Open Anyway" next to the blocked app message
+
 ### Build from Source
 
 ```bash

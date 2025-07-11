@@ -19,6 +19,24 @@
 - Node.js 16+
 - GitHub Personal Access Token（用于 Gist 同步）
 
+### 从 Releases 下载
+
+从 [Releases 页面](https://github.com/xpzouying/simple-notes/releases) 下载最新版本。
+
+**macOS 用户注意事项**：如果遇到 "Simple Notes 已损坏，无法打开" 的错误，这是由于 macOS Gatekeeper 安全机制导致的。解决方法：
+
+1. 打开终端
+2. 导航到包含应用的文件夹
+3. 运行以下命令：
+   ```bash
+   xattr -cr "Simple Notes.app"
+   ```
+4. 再次尝试打开应用
+
+或者，您也可以在系统偏好设置中允许该应用：
+- 前往 系统偏好设置 > 安全性与隐私 > 通用
+- 点击被阻止的应用信息旁边的"仍要打开"
+
 ### 从源码构建
 
 ```bash
