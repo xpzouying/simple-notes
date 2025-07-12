@@ -15,14 +15,11 @@ fn main() {
             // Create tray menu
             let menu = Menu::new(app)?;
             
-            let open_item = MenuItemBuilder::with_id("open", "Open Notes").build(app)?;
             let settings_item = MenuItemBuilder::with_id("settings", "Settings").build(app)?;
             let project_item = MenuItemBuilder::with_id("project", "Project Page").build(app)?;
             let about_item = MenuItemBuilder::with_id("about", "About Author").build(app)?;
             let quit_item = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
             
-            menu.append(&open_item)?;
-            menu.append(&PredefinedMenuItem::separator(app)?)?;
             menu.append(&settings_item)?;
             menu.append(&project_item)?;
             menu.append(&about_item)?;
@@ -34,11 +31,8 @@ fn main() {
             
             // Set menu and event handlers
             tray.set_menu(Some(menu))?;
+            tray.set_show_menu_on_left_click(false)?;
             tray.on_menu_event(|app, event| match event.id.as_ref() {
-                "open" => {
-                    let window = app.get_webview_window("main").unwrap();
-                    toggle_window(&window);
-                }
                 "settings" => {
                     let window = app.get_webview_window("main").unwrap();
                     window.emit("open-settings", ()).unwrap();
