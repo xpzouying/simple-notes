@@ -3,11 +3,10 @@
 use tauri::{
     Manager, WindowEvent, Emitter,
     menu::{Menu, MenuItemBuilder, PredefinedMenuItem},
-    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    tray::{MouseButton, MouseButtonState, TrayIconEvent},
 };
 
-mod lib;
-use lib::*;
+use app_lib::*;
 
 fn main() {
     tauri::Builder::default()
@@ -30,44 +29,46 @@ fn main() {
             menu.append(&PredefinedMenuItem::separator(app)?)?;
             menu.append(&quit_item)?;
 
-            // Create system tray
-            let _tray = TrayIconBuilder::new()
-                .menu(&menu)
-                .on_menu_event(|app, event| match event.id.as_ref() {
-                    "open" => {
-                        let window = app.get_webview_window("main").unwrap();
-                        toggle_window(&window);
-                    }
-                    "settings" => {
-                        let window = app.get_webview_window("main").unwrap();
-                        window.emit("open-settings", ()).unwrap();
-                        toggle_window(&window);
-                    }
-                    "project" => {
-                        let _ = webbrowser::open("https://github.com/xpzouying/simple-notes");
-                    }
-                    "about" => {
-                        // Open author page
-                        let _ = webbrowser::open("https://haha.ai");
-                    }
-                    "quit" => {
-                        std::process::exit(0);
-                    }
-                    _ => {}
-                })
-                .on_tray_icon_event(|tray, event| match event {
-                    TrayIconEvent::Click {
-                        button: MouseButton::Left,
-                        button_state: MouseButtonState::Up,
-                        ..
-                    } => {
-                        let app = tray.app_handle();
-                        let window = app.get_webview_window("main").unwrap();
-                        toggle_window(&window);
-                    }
-                    _ => {}
-                })
-                .build(app)?;
+            // Get the tray icon that was created from config
+            let tray = app.handle().tray_by_id("main-tray").unwrap();
+            
+            // Set menu and event handlers
+            tray.set_menu(Some(menu))?;
+            tray.on_menu_event(|app, event| match event.id.as_ref() {
+                "open" => {
+                    let window = app.get_webview_window("main").unwrap();
+                    toggle_window(&window);
+                }
+                "settings" => {
+                    let window = app.get_webview_window("main").unwrap();
+                    window.emit("open-settings", ()).unwrap();
+                    toggle_window(&window);
+                }
+                "project" => {
+                    let _ = webbrowser::open("https://github.com/xpzouying/simple-notes");
+                }
+                "about" => {
+                    // Open author page
+                    let _ = webbrowser::open("https://haha.ai");
+                }
+                "quit" => {
+                    std::process::exit(0);
+                }
+                _ => {}
+            });
+            
+            tray.on_tray_icon_event(|tray, event| match event {
+                TrayIconEvent::Click {
+                    button: MouseButton::Left,
+                    button_state: MouseButtonState::Up,
+                    ..
+                } => {
+                    let app = tray.app_handle();
+                    let window = app.get_webview_window("main").unwrap();
+                    toggle_window(&window);
+                }
+                _ => {}
+            });
 
             let window = app.get_webview_window("main").unwrap();
             
