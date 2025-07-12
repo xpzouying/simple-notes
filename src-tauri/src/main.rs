@@ -78,9 +78,23 @@ fn main() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            if let WindowEvent::CloseRequested { api, .. } = event {
-                window.hide().unwrap();
-                api.prevent_close();
+            match event {
+                WindowEvent::CloseRequested { api, .. } => {
+                    window.hide().unwrap();
+                    api.prevent_close();
+                }
+                WindowEvent::Focused(false) => {
+                    // 失去焦点时延迟隐藏窗口，防止误触
+                    let window_clone = window.clone();
+                    std::thread::spawn(move || {
+                        std::thread::sleep(std::time::Duration::from_millis(200));
+                        // 再次检查窗口是否仍然没有焦点
+                        if !window_clone.is_focused().unwrap_or(false) {
+                            window_clone.hide().unwrap();
+                        }
+                    });
+                }
+                _ => {}
             }
         })
         .invoke_handler(tauri::generate_handler![])
