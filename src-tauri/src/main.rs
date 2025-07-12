@@ -12,6 +12,9 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
+            // Initialize positioner plugin
+            #[cfg(desktop)]
+            app.handle().plugin(tauri_plugin_positioner::init())?;
             // Create tray menu
             let menu = Menu::new(app)?;
             
@@ -51,22 +54,29 @@ fn main() {
                 _ => {}
             });
             
-            tray.on_tray_icon_event(|tray, event| match event {
-                TrayIconEvent::Click {
-                    button: MouseButton::Left,
-                    button_state: MouseButtonState::Up,
-                    ..
-                } => {
-                    let app = tray.app_handle();
-                    let window = app.get_webview_window("main").unwrap();
-                    toggle_window(&window);
+            tray.on_tray_icon_event(|tray, event| {
+                // Let positioner handle the event first for background processing
+                tauri_plugin_positioner::on_tray_event(tray.app_handle(), &event);
+                
+                match event {
+                    TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        rect,
+                        ..
+                    } => {
+                        let app = tray.app_handle();
+                        let window = app.get_webview_window("main").unwrap();
+                        // Pass the tray rect to position function
+                        toggle_window_near_tray_rect(&window, rect);
+                    }
+                    _ => {}
                 }
-                _ => {}
             });
 
             let window = app.get_webview_window("main").unwrap();
             
-            // Position window near system tray
+            // Initial positioning (window starts hidden)
             position_window(&window);
             
             Ok(())

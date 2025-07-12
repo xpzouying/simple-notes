@@ -23,6 +23,9 @@ webbrowser = "1.0"
 cocoa = "0.25"
 objc = "0.2"
 
+[target.'cfg(any(target_os = "macos", windows, target_os = "linux"))'.dependencies]
+tauri-plugin-positioner = { version = "2.3.0", features = ["tray-icon"] }
+
 [features]
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
